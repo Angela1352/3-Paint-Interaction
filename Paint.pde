@@ -17,6 +17,9 @@ color black    = #000000;
 
 //variables ----------------------------------
 color selectedColor;
+float sliderX; //slider2X
+float shade; //thickness
+
 
 
 void setup () { //----------------------------
@@ -25,6 +28,12 @@ void setup () { //----------------------------
   strokeWeight(5);
   stroke(selectedColor);
   selectedColor = 0;
+
+  sliderX = 200;
+  shade = 127;
+
+  // slider2X = 300;
+  // thickness = 2;
 }
 
 
@@ -44,6 +53,16 @@ void tactile (int x, int y, int r) { //-------
 }
 
 
+void tactile2 (int x, int y, int r) { //-------
+  if (dist(x, y, mouseX, mouseY) < r) {
+    stroke(black);
+  } else {
+    stroke(white);
+  }
+}
+
+
+
 void toolbar () { //---------------------------
   fill(50);
   stroke(50);
@@ -53,129 +72,111 @@ void toolbar () { //---------------------------
 void colorButtons () { //----------------------
   strokeWeight(2);
 
-  tactile(30, 505, 40);
+  tactile(30, 505, 20);
   fill(red);
   circle(30, 505, 40);
 
-  tactile(85, 505, 40);
+  tactile(80, 505, 20);
   fill(orange);
-  circle(85, 505, 40);
+  circle(80, 505, 40);
 
-  tactile(145, 505, 40);
+  tactile(130, 505, 20);
   fill(yellow);
-  circle(145, 505, 40);
+  circle(130, 505, 40);
 
-  tactile(205, 505, 40);
+  tactile(180, 505, 20);
   fill(green);
-  circle(205, 505, 40);
+  circle(180, 505, 40);
 
-  tactile(265, 505, 40);
+  tactile(230, 505, 20);
   fill(blue);
-  circle(265, 505, 40);
+  circle(230, 505, 40);
 
-  tactile(325, 505, 40);
+  tactile(280, 505, 20);
   fill(purple);
-  circle(325, 505, 40);
+  circle(280, 505, 40);
 
-  tactile(385, 505, 40);
+  tactile(330, 505, 20);
   fill(pink);
-  circle(385, 505, 40);
+  circle(330, 505, 40);
 }
 
 void shadeButtons () {
+  tactile(30, 560, 20);
   fill(white);
   circle(30, 560, 40);
   stroke(255);
+  tactile2(330, 560, 20);
   fill(black);
-  circle (385, 560, 40);
-  
+  circle (330, 560, 40);
+
   //SLIDER -----------------------------------
-  
-  
+  stroke(shade);
+  shade = map(sliderX, 80, 280, 0, 255);
+  //thickness = map(slider2X, 500, 150, 2, 30);
+
+  //strokeWeight(thickness);
+
+  line(80, 560, 280, 560);
+  circle(sliderX, 560, 30);
+  //circle(sliderX, 300, 50);
+
+  //line(80, 150, 80, 500);
+  //circle(80, slider2X, 50);
 }
+
+
 
 
 void mouseReleased () { //--------------------
   //color buttons
-  if (dist(30, 505, mouseX, mouseY) < 40) {
+  if (dist(30, 505, mouseX, mouseY) < 20) {
     selectedColor = red;
   }
-  if (dist(85, 505, mouseX, mouseY) < 40) {
+  if (dist(80, 505, mouseX, mouseY) < 20) {
     selectedColor = orange;
   }
-  if (dist(145, 505, mouseX, mouseY) < 40) {
+  if (dist(130, 505, mouseX, mouseY) < 20) {
     selectedColor = yellow;
   }
-  if (dist(205, 505, mouseX, mouseY) < 40) {
+  if (dist(180, 505, mouseX, mouseY) < 20) {
     selectedColor = green;
   }
-  if (dist(265, 505, mouseX, mouseY) < 40) {
+  if (dist(230, 505, mouseX, mouseY) < 20) {
     selectedColor = blue;
   }
-  if (dist(325, 505, mouseX, mouseY) < 40) {
+  if (dist(280, 505, mouseX, mouseY) < 20) {
     selectedColor = purple;
   }
-  if (dist(385, 505, mouseX, mouseY) < 40) {
+  if (dist(330, 505, mouseX, mouseY) < 20) {
     selectedColor = pink;
   }
-  
-  
+  if (dist(30, 560, mouseX, mouseY) < 20) {
+    selectedColor = white;
+  }
+  if (dist(330, 560, mouseX, mouseY) < 20) {
+    selectedColor = black;
+  }
+
+  controlSlider();
 }
 
 
 void mouseDragged () { //----------------------
-  stroke(selectedColor);
-  line(pmouseX, pmouseY, mouseX, mouseY);
+  if (mouseY < 478) {
+    stroke(selectedColor);
+    line(pmouseX, pmouseY, mouseX, mouseY);
+  }
+
+  controlSlider();
 }
 
 
-//SLIDERRRR 
-//float sliderX, sliderY;
-//float thickness;
-//float shade;
-
-//void setup () {
-//  size(800, 600);
-//  strokeWeight(5);
-//  stroke(salmon);
-//  fill(salmon);
-//  sliderX = 400;
-//  sliderY = 300;
-//  thickness = 2;
-//  shade = 100;
-//}
-
-//void draw () {
-//  background(shade); 
-
-//  shade = map(sliderX, 350, 750, 0, 255);
-//  thickness = map(sliderY, 500, 150, 2, 30);
-
-//  strokeWeight(thickness);
-
-//  line(350, 300, 750, 300);
-//  circle(sliderX, 300, 50);
-
-//  line(80, 150, 80, 500);
-//  circle(80, sliderY, 50);
-//}
-
-//void mouseDragged () {
-//  controlSlider();
-//}
-
-//void mouseReleased () {
-//  controlSlider();
-//}
-
-//void controlSlider () {
-//  if (mouseX > 350 && mouseX < 750 && mouseY > 275 && mouseY < 325) {
-//    sliderX = mouseX;
-//  }
-//  if (mouseX > 60 && mouseX < 110 && mouseY > 150 && mouseY < 500) {
-//    sliderY = mouseY;
-//  }
-//}
+void controlSlider () {
+  if (mouseX > 80 && mouseX < 280 && mouseY > 545 && mouseY < 575) {
+    sliderX = mouseX;
+  }
+}
 
 
 
@@ -185,7 +186,4 @@ void mouseDragged () { //----------------------
 //square: draw or erase?
 //slider: black to white, stroke Weight
 //square: save, clear, load
-
-
-//ASK PELLETIER
-//how to make rectangles tactile
+//undo & redo
