@@ -22,6 +22,7 @@ color selectedColor;
 float sliderX, slider2X;
 float shade, thickness;
 
+PImage smile;
 
 
 void setup () { //----------------------------
@@ -36,6 +37,8 @@ void setup () { //----------------------------
 
   slider2X = 500;
   thickness = 2;
+
+  smile = loadImage("smile.jpg");
 }
 
 
@@ -48,6 +51,9 @@ void draw () { //-----------------------------
   thickness();
   rectangleButtons();
   indicator();
+
+  background(100);
+  image(smile, 100, 100, 100, 100);
 }
 
 
@@ -86,6 +92,14 @@ void controlSlider2 () { //----------------------
   }
 }
 
+
+
+void saveImage(File f) {
+  if (f != null) {
+    PImage canvas = get(0, 0, width, height-130);
+    canvas.save(f.getAbsolutePath());
+  }
+}
 
 
 void toolbar () { //---------------------------
@@ -161,10 +175,10 @@ void rectangleButtons () {
   rect(695, 545, 65, 35);
   strokeWeight(thickness);
   fill(255);
-  textSize(20);
+  textSize(18);
   textAlign(CENTER, CENTER);
-  text("CLEAR", 727, 505);
-  text("SAVE", 727, 560);
+  text("CLEAR", 728, 507);
+  text("SAVE", 727, 562);
 }
 
 
@@ -190,10 +204,10 @@ void indicator () {
   fill(white);
   stroke(selectedColor);
   circle(400, 505, 35);
-  
+
   if (selectedColor == white) {
-   fill(black); 
-   circle(400, 505, 35);
+    fill(black); 
+    circle(400, 505, 35);
   }
 }
 
@@ -228,9 +242,26 @@ void mouseReleased () { //--------------------
   if (dist(330, 560, mouseX, mouseY) < 20) {
     selectedColor = black;
   }
+  if (mouseX > 80 && mouseX < 280 && mouseY > 545 && mouseY < 575) {
+    selectedColor = color(shade);
+  }
 
   controlSlider();
   controlSlider2();
+
+  //rect(695, 545, 65, 35);
+
+  //clear button
+  if (mouseX > 695 && mouseX < 760 && mouseY > 490 && mouseY < 525) {
+    fill(white);
+    strokeWeight(0);
+    rect(0, 0, 800, 470);
+  }
+
+  //save button
+  if (mouseX > 695 && mouseX < 760 && mouseY > 545 && mouseY < 580) {
+    selectOutput("Choose a name for your image file", "saveImage");
+  }
 }
 
 
@@ -239,20 +270,23 @@ void mouseDragged () { //----------------------
   if (mouseY < 470) {
     stroke(selectedColor);
     line(pmouseX, pmouseY, mouseX, mouseY);
+    println(mouseY);
   }
 
   controlSlider();
   controlSlider2();
+
+  if (mouseX > 80 && mouseX < 280 && mouseY > 545 && mouseY < 575) {
+    selectedColor = color(shade);
+  }
 }
+
+
 
 
 
 //PAINT APP
 //icons
-//make buttons interactive
-//make clear and save buttons
-//finished 
+//make sliders and clear and save tactile
 
-//ASK
-//How to make slider change color
-//tail 
+//https://www.google.com/search?q=smiley+faces&tbm=isch&chips=q:smiley+faces,g_1:transparent:aq3PRPcBfxw%3D&rlz=1C1GCEB_enCA991CA991&hl=en&sa=X&ved=2ahUKEwiP5YaM_Ln2AhUeBzQIHRt-Dw0Q4lYoBXoECAEQJg&biw=1423&bih=700#imgrc=NPgnTD-eK-MGyM
