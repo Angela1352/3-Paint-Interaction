@@ -19,12 +19,13 @@ color black    = #000000;
 
 //variables --------------------------------------------
 color selectedColor;
-float sliderX, slider2X;
+int sliderX, slider2X;
 float shade, thickness;
 
-PImage icon1, icon2, icon3;
+PImage icon1, icon2, icon3, icon4;
+PImage iconSelector;
 
-boolean icon1On; //true or false
+boolean iconOn, icon1On, icon2On, icon3On, icon4On; //true or false
 
 
 
@@ -44,8 +45,12 @@ void setup () { //--------------------------------------
   icon1 = loadImage("icon1.png");
   icon2 = loadImage("icon2.png");
   icon3 = loadImage("icon3.png");
+  icon4 = loadImage("icon4.png");
 
-  icon1On = true;
+  icon1On = false;
+  icon2On = false;
+  icon3On = false;
+  icon4On = false;
 }
 
 
@@ -58,12 +63,7 @@ void draw () { //---------------------------------------
   thickness();
   rectangleButtons();
   indicator();
-
-
-  tactile4(440, 485, 40, 40);
-  strokeWeight(0);
-  rect(440, 485, 40, 40);
-  image(icon1, 440, 485, 40, 40);
+  icon();
 }
 
 
@@ -89,7 +89,7 @@ void tactile2 (int x, int y, int r) { //----------------
 
 
 void tactile3 (int x, int y, int w, int h) { //----------------
-  if (mouseX > X && mouseX < x+w && mouseY > y &&  mouseY < y+w) {
+  if (mouseX > x && mouseX < x+w && mouseY > y &&  mouseY < y+w) {
     stroke(black);
   } else {
     stroke(white);
@@ -99,7 +99,7 @@ void tactile3 (int x, int y, int w, int h) { //----------------
 
 
 void tactile4 (int x, int y, int w, int h) { //----------------
-  if (mouseX > X && mouseX < x+w && mouseY > y &&  mouseY < y+w) {
+  if (mouseX > x && mouseX < x+w && mouseY > y &&  mouseY < y+w) {
     fill(200);
   } else {
     fill(white);
@@ -193,6 +193,7 @@ void shadeButtons () { //---------------------------------
   line(80, 560, 280, 560);
   stroke(0);
   strokeWeight(3);
+  tactile(sliderX, 560, 15);
   circle(sliderX, 560, 30);
 }
 
@@ -215,6 +216,34 @@ void rectangleButtons () {
 
 
 
+void icon () {
+  tactile4(440, 485, 40, 40);
+  icon1OnOff();
+  strokeWeight(3);
+  rect(440, 485, 40, 40);
+  image(icon1, 440, 485, 40, 40);
+
+  tactile4(490, 485, 40, 40);
+  icon2OnOff();
+  strokeWeight(3);
+  rect(490, 485, 40, 40);
+  image(icon2, 490, 485, 40, 40);
+
+  tactile4(540, 485, 40, 40);
+  // icon3OnOff();
+  strokeWeight(3);
+  rect(540, 485, 40, 40);
+  image(icon3, 540, 485, 40, 40);
+
+  tactile4(590, 485, 40, 40);
+  // icon4OnOff();
+  strokeWeight(3);
+  rect(590, 485, 40, 40);
+  image(icon4, 590, 485, 40, 40);
+}
+
+
+
 void thickness () { //----------------------------------
   fill(255);
   stroke(255);
@@ -225,6 +254,7 @@ void thickness () { //----------------------------------
   line(390, 560, 600, 560);
   stroke(0);
   strokeWeight(3);
+  tactile(slider2X, 560, 15);
   circle(slider2X, 560, 30);
   thickness = map(slider2X, 390, 600, 2, 20);
   strokeWeight(thickness);
@@ -240,6 +270,52 @@ void indicator () {
   if (selectedColor == white) {
     fill(black);
     circle(400, 505, 35);
+  }
+}
+
+
+
+void icon1OnOff () {
+  if (icon1On == true) {
+    stroke(orange);
+    strokeWeight(3);
+  } else {
+    stroke(255);
+    strokeWeight(1);
+  }
+}
+
+void icon2OnOff () {
+  if (icon2On == true) {
+    stroke(orange);
+    strokeWeight(3);
+  } else {
+    stroke(255);
+    strokeWeight(1);
+  }
+}
+
+
+
+void icon3OnOff () {
+  if (icon3On == true) {
+    stroke(orange);
+    strokeWeight(3);
+  } else {
+    stroke(255);
+    strokeWeight(1);
+  }
+}
+
+
+
+void icon4OnOff () {
+  if (icon4On == true) {
+    stroke(orange);
+    strokeWeight(3);
+  } else {
+    stroke(255);
+    strokeWeight(1);
   }
 }
 
@@ -293,10 +369,39 @@ void mouseReleased () { //--------------------------------
     selectOutput("Choose a name for your image file", "saveImage");
   }
 
-  if (mouseY < 470) {
-    stroke(selectedColor);
-    line(pmouseX, pmouseY, mouseX, mouseY);
-    println(mouseY);
+  if (iconOn == false) {
+    //squiggly line
+    if (mouseY < 470) {
+      stroke(selectedColor);
+      strokeWeight(thickness);
+      line(pmouseX, pmouseY, mouseX, mouseY);
+      println(mouseY);
+    }
+  } else {
+    //icons
+    if (mouseY < 470) {
+      image(icon1, mouseX, mouseY, thickness+80, thickness+80);
+    }
+  }
+
+  //icon buttons
+  if (mouseX > 440 && mouseX < 480 && mouseY > 485 && mouseY < 525) {
+    icon1On = !icon1On;
+  }
+
+  //icon buttons
+  if (mouseX > 490 && mouseX < 530 && mouseY > 485 && mouseY < 525) {
+    icon2On = !icon2On;
+  }
+
+  //icon buttons
+  if (mouseX > 540 && mouseX < 580 && mouseY > 485 && mouseY < 525) {
+    icon3On = !icon3On;
+  }
+
+  //icon buttons
+  if (mouseX > 590 && mouseX < 630 && mouseY > 485 && mouseY < 525) {
+    icon4On = !icon4On;
   }
 }
 
@@ -310,11 +415,12 @@ void mouseDragged () { //----------------------------------
       strokeWeight(thickness);
       line(pmouseX, pmouseY, mouseX, mouseY);
       println(mouseY);
-    } else {
-      //icons
-      image(icon1, mouseX, mouseY, 100, 100);
     }
+  } else {
+    //icons
+    image(icon1, mouseX, mouseY, thickness+80, thickness+80);
   }
+
 
   controlSlider();
   controlSlider2();
@@ -325,14 +431,4 @@ void mouseDragged () { //----------------------------------
 }
 
 
-
-
-
-//PAINT APP
-//finish icon video
-//slider change icon size
-
-//ASK
-//how to draw smiley face
-//make sliders tactile
-//tactile rectangles -- fix
+//make icons work
