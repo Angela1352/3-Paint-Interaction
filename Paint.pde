@@ -4,7 +4,7 @@
 
 
 
-//Pallette -----------------------------------
+//Pallette ---------------------------------------------
 color red      = #FF4646;
 color orange   = #FFBE46;
 color yellow   = #F8F087;
@@ -17,15 +17,18 @@ color black    = #000000;
 
 
 
-//variables ----------------------------------
+//variables --------------------------------------------
 color selectedColor;
 float sliderX, slider2X;
 float shade, thickness;
 
-PImage smile;
+PImage icon1, icon2, icon3;
+
+boolean icon1On; //true or false
 
 
-void setup () { //----------------------------
+
+void setup () { //--------------------------------------
   size(800, 600);
   background(255);
   strokeWeight(5);
@@ -38,12 +41,16 @@ void setup () { //----------------------------
   slider2X = 500;
   thickness = 2;
 
-  smile = loadImage("smile.jpg");
+  icon1 = loadImage("icon1.png");
+  icon2 = loadImage("icon2.png");
+  icon3 = loadImage("icon3.png");
+
+  icon1On = true;
 }
 
 
 
-void draw () { //-----------------------------
+void draw () { //---------------------------------------
   strokeWeight(thickness);
   toolbar();
   colorButtons();
@@ -52,13 +59,16 @@ void draw () { //-----------------------------
   rectangleButtons();
   indicator();
 
-  background(100);
-  image(smile, 100, 100, 100, 100);
+
+  tactile4(440, 485, 40, 40);
+  strokeWeight(0);
+  rect(440, 485, 40, 40);
+  image(icon1, 440, 485, 40, 40);
 }
 
 
 
-void tactile (int x, int y, int r) { //-------
+void tactile (int x, int y, int r) { //-----------------
   if (dist(x, y, mouseX, mouseY) < r) {
     stroke(white);
   } else {
@@ -68,7 +78,7 @@ void tactile (int x, int y, int r) { //-------
 
 
 
-void tactile2 (int x, int y, int r) { //-------
+void tactile2 (int x, int y, int r) { //----------------
   if (dist(x, y, mouseX, mouseY) < r) {
     stroke(black);
   } else {
@@ -78,7 +88,27 @@ void tactile2 (int x, int y, int r) { //-------
 
 
 
-void controlSlider () { //----------------------
+void tactile3 (int x, int y, int w, int h) { //----------------
+  if (mouseX > X && mouseX < x+w && mouseY > y &&  mouseY < y+w) {
+    stroke(black);
+  } else {
+    stroke(white);
+  }
+}
+
+
+
+void tactile4 (int x, int y, int w, int h) { //----------------
+  if (mouseX > X && mouseX < x+w && mouseY > y &&  mouseY < y+w) {
+    fill(200);
+  } else {
+    fill(white);
+  }
+}
+
+
+
+void controlSlider () { //------------------------------
   if (mouseX > 80 && mouseX < 280 && mouseY > 545 && mouseY < 575) {
     sliderX = mouseX;
   }
@@ -86,7 +116,7 @@ void controlSlider () { //----------------------
 
 
 
-void controlSlider2 () { //----------------------
+void controlSlider2 () { //------------------------------
   if (mouseX > 390 && mouseX < 600 && mouseY > 545 && mouseY < 575) {
     slider2X = mouseX;
   }
@@ -102,7 +132,8 @@ void saveImage(File f) {
 }
 
 
-void toolbar () { //---------------------------
+
+void toolbar () { //--------------------------------------
   fill(50);
   stroke(50);
   strokeWeight(20);
@@ -111,7 +142,7 @@ void toolbar () { //---------------------------
 
 
 
-void colorButtons () { //----------------------
+void colorButtons () { //---------------------------------
   strokeWeight(2);
 
   tactile(30, 505, 20);
@@ -145,7 +176,7 @@ void colorButtons () { //----------------------
 
 
 
-void shadeButtons () { //----------------------
+void shadeButtons () { //---------------------------------
   tactile(30, 560, 20);
   fill(white);
   circle(30, 560, 40);
@@ -168,10 +199,11 @@ void shadeButtons () { //----------------------
 
 
 void rectangleButtons () {
-  stroke(0);
+  tactile3(695, 490, 65, 35);
   strokeWeight(2);
   fill(150);
   rect(695, 490, 65, 35);
+  tactile3(695, 545, 65, 35);
   rect(695, 545, 65, 35);
   strokeWeight(thickness);
   fill(255);
@@ -183,7 +215,7 @@ void rectangleButtons () {
 
 
 
-void thickness () { //------------------------
+void thickness () { //----------------------------------
   fill(255);
   stroke(255);
   circle(365, 560, 4);
@@ -206,14 +238,14 @@ void indicator () {
   circle(400, 505, 35);
 
   if (selectedColor == white) {
-    fill(black); 
+    fill(black);
     circle(400, 505, 35);
   }
 }
 
 
 
-void mouseReleased () { //--------------------
+void mouseReleased () { //--------------------------------
   //color buttons
   if (dist(30, 505, mouseX, mouseY) < 20) {
     selectedColor = red;
@@ -249,8 +281,6 @@ void mouseReleased () { //--------------------
   controlSlider();
   controlSlider2();
 
-  //rect(695, 545, 65, 35);
-
   //clear button
   if (mouseX > 695 && mouseX < 760 && mouseY > 490 && mouseY < 525) {
     fill(white);
@@ -262,15 +292,28 @@ void mouseReleased () { //--------------------
   if (mouseX > 695 && mouseX < 760 && mouseY > 545 && mouseY < 580) {
     selectOutput("Choose a name for your image file", "saveImage");
   }
-}
 
-
-
-void mouseDragged () { //----------------------
   if (mouseY < 470) {
     stroke(selectedColor);
     line(pmouseX, pmouseY, mouseX, mouseY);
     println(mouseY);
+  }
+}
+
+
+
+void mouseDragged () { //----------------------------------
+  if (icon1On == false) {
+    //squiggly line
+    if (mouseY < 470) {
+      stroke(selectedColor);
+      strokeWeight(thickness);
+      line(pmouseX, pmouseY, mouseX, mouseY);
+      println(mouseY);
+    } else {
+      //icons
+      image(icon1, mouseX, mouseY, 100, 100);
+    }
   }
 
   controlSlider();
@@ -286,7 +329,10 @@ void mouseDragged () { //----------------------
 
 
 //PAINT APP
-//icons
-//make sliders and clear and save tactile
+//finish icon video
+//slider change icon size
 
-//https://www.google.com/search?q=smiley+faces&tbm=isch&chips=q:smiley+faces,g_1:transparent:aq3PRPcBfxw%3D&rlz=1C1GCEB_enCA991CA991&hl=en&sa=X&ved=2ahUKEwiP5YaM_Ln2AhUeBzQIHRt-Dw0Q4lYoBXoECAEQJg&biw=1423&bih=700#imgrc=NPgnTD-eK-MGyM
+//ASK
+//how to draw smiley face
+//make sliders tactile
+//tactile rectangles -- fix
